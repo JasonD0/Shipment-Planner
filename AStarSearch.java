@@ -1,27 +1,58 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-public class AStarSearch<Node> {
-
-	private Node startNode;
-	private Node endNode;
-	
-	private PriorityQueue<Node> openSet = new PriorityQueue<Node>(); 
-	private HashSet<Node> closedSet = new HashSet<Node>();
-	private Map<Integer, Node> cameFrom = new HashMap<Integer, Node>();
-	private Map<Node, Double> cost = new HashMap<Node, Double>();  // SELF NOTE: Double parameter can be null, double can't (similar with int)
-	// pretend null is infinity
-	
-	
-	
-	public AStarSearch(Node startNode, Node endNode) {
-		this.startNode = startNode;
-		this.endNode = endNode;
+public class AStarSearch<E> 
+{
+	public List<Node<E>> getPath(Node<E> source, Node<E> destination, int mapSize) {
+		PriorityQueue<Node<E>> toExplore = new PriorityQueue<Node<E>>(); 
+		HashSet<Node<E>> visited = new HashSet<Node<E>>();
+		Map<Node<E>, Node<E>> successors = new HashMap<Node<E>, Node<E>>();
+		
+		// can do for primitive types eg new Double/Integer/etc (0)
+		Map<Node<E>, Integer> gScore = new HashMap<Node<E>, Integer>();  // SELF NOTE: Double(primitive) parameter can be null, double can't (similar with int)
+		Map<Node<E>, Integer> fScore = new HashMap<Node<E>, Integer>();
+		Node<E> current = null;
+		
+		toExplore.add(source);
+		gScore.put(source, 0);
+		fScore.put(source, 0/*replace by heurstic function*/);
+		
+		while (!toExplore.isEmpty()) {
+			current = toExplore.poll();
+			if (current.equals(destination)) {     // probably just do current.name/id  destination....   or do own equals method ...(best)
+				return reconstructPath(successors, destination);
+			}
+			
+			toExplore.remove(current);  // redundant but keep so follow pseudo code -> remove once working at end
+			visited.add(current);
+			
+			for (Edge<E> neighbour : current.getEdges()) {
+				if (visited.contains(neighbour.getNodeTo())) continue;
+				if (!toExplore.contains(neighbour.getNodeTo())) toExplore.add(neighbour.getNodeTo());
+				
+				int tentative_gScore = gScore.get(current) + current.getEdgeCost(destination);
+				if (tentative_gScore >= gScore.get(neighbour.getNodeTo())) continue; // bad path
+				
+				// good path
+				successors.put(neighbour.getNodeTo(), current);
+				gScore.put(neighbour.getNodeTo(), tentative_gScore);
+				fScore.put(neighbour.getNodeTo(), gScore.get(neighbour.getNodeTo()) + 0/*replace by heuristic function*/);
+			}
+		}
+		return null;
 	}
 	
-	public void getPath() {
-		
+	public List<Node<E>> reconstructPath(Map<Node<E>, Node<E>> successors, Node<E> current) {
+		List<Node<E>> path = new ArrayList<Node<E>>();
+		path.add(current);
+		for (Map.Entry<Node<E>, Node<E>> parent : successors.entrySet()) {
+			current = parent.getKey();
+			path.add(current); 	
+		}
+		return path;
 	}
 }

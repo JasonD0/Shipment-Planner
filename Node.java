@@ -26,11 +26,24 @@ public class Node<E>
 		return this.name;
 	}
 	
+	public LinkedList<Edge<E>> getEdges() {
+		return this.edgesList;
+	}
+	
 	public void addEdge(Node<E> destination, int cost) {
 		Edge<E> newEdge = new Edge<E>(destination, cost);
 		if (!edgesList.contains(newEdge)) {
 			edgesList.add(newEdge);
 		}
+	}
+	
+	public int getEdgeCost(Node<E> destination) {
+		for (Edge<E> neighbour : edgesList) {
+			if (destination.equals(neighbour.getNodeTo())) {
+				return neighbour.getCost();
+			}
+		}
+		return 0 /*infinity*/;
 	}
 	
 	
