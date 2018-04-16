@@ -10,7 +10,7 @@ public class AStarSearch<Node> {
 	
 	private PriorityQueue<Node> openSet = new PriorityQueue<Node>(); 
 	private HashSet<Node> closedSet = new HashSet<Node>();
-	private HashMap<Integer, Node> cameFrom = new HashMap<Integer, Node>();
+	private Map<Integer, Node> cameFrom = new HashMap<Integer, Node>();
 	private Map<Node, Double> cost = new HashMap<Node, Double>();  // SELF NOTE: Double parameter can be null, double can't (similar with int)
 	// pretend null is infinity
 	
