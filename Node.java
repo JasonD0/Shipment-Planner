@@ -2,8 +2,9 @@ import java.util.LinkedList;
 
 public class Node<E> 
 {
-	private int nodeId;
+	private int nodeId; // not needed?
 	private LinkedList<Edge<E>> edgesList;
+	private LinkedList<Node<E>> shipmentsList;
 	private int refuelTime; 
 	private String name;
  	
@@ -12,6 +13,7 @@ public class Node<E>
 		this.refuelTime = refuelTime;
 		this.name = name;
 		this.edgesList = new LinkedList<Edge<E>>();
+		this.shipmentsList = new LinkedList<Node<E>>();
 	}
 	
 	public int getNodeId() {
@@ -46,6 +48,30 @@ public class Node<E>
 		return 0 /*infinity*/;
 	}
 	
+	public void addShipment(Node<E> destination) {
+		if (!shipmentsList.contains(destination)) {    // for all others like this (checking) -> remove -> check in main(?) -> precondition
+			shipmentsList.add(destination);
+		} 
+	}
+	
+	public boolean checkShipmentTo(Node<E> destination) {
+		return shipmentsList.contains(destination);
+	}
+	
+	
+	/*
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		if (this.getClass() != o.getClass()) return false;
+		
+		Node<?> node = (Node<?>) o;
+		return (this.nodeId == node.nodeId && 
+				this.refuelTime == node.refuelTime && 
+				this.name.equals(node.name)); 
+	}*/
+	
 	
 	// test
 	public void showEdge() {
@@ -56,4 +82,11 @@ public class Node<E>
 		System.out.println("}");
 	}
 	
+	public void showNodeShipments() {
+		System.out.print(this.name + " -> {");
+		for (Node<E> node : shipmentsList) {
+			System.out.print(node.getName() + " ");
+		}
+		System.out.println("}");
+	}
 }

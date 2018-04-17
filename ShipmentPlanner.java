@@ -12,7 +12,6 @@ public class ShipmentPlanner
 {
 	
     public static <E> void main(String[] args) {
-    	ShipmentsList<E> shipments = new ShipmentsList<E>();
     	Graph<E> map = new Graph<E>();
     	File input = new File(args[0]);
         Scanner sc = null;
@@ -29,9 +28,12 @@ public class ShipmentPlanner
             		case "Time":
             			Node<E> source = map.getNode(line[2]);
             			source.addEdge(map.getNode(line[3]), Integer.parseInt(line[1]));
+            			source = map.getNode(line[3]);
+            			source.addEdge(map.getNode(line[2]), Integer.parseInt(line[1]));
             			break;
             		case "Shipment":
-            			shipments.insertShipment(map.getNode(line[1]), map.getNode(line[2]));
+            			Node<E> shipmentFrom = map.getNode(line[1]);
+            			shipmentFrom.addShipment(map.getNode(line[2]));
             			break;
             		default: 
             			break;
@@ -39,7 +41,8 @@ public class ShipmentPlanner
             }
             // test
             map.showMap();
-            shipments.showShipments();
+            map.showShipments();
+//            map.getPath(map.getNode("Sydney"), map.getNode("Manila"));
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         } finally {
