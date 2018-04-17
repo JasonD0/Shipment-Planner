@@ -1,15 +1,15 @@
 
-public class Edge<E>
+public class Edge
 {
-	private Node<E> nodeTo;
+	private Node nodeTo;
 	private int cost;
 	
-	public Edge(Node<E> nodeTo, int cost) {
+	public Edge(Node nodeTo, int cost) {
 		this.nodeTo = nodeTo;
 		this.cost = cost;
 	}
 	
-	public Node<E> getNodeTo() {
+	public Node getNodeTo() {
 		return this.nodeTo;
 	}
 	

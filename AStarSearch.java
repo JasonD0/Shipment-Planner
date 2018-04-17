@@ -9,17 +9,17 @@ import java.util.PriorityQueue;
 // maybe set of must pass as parameter -> if direct connection -> go there 
 // maybe call astarseach multiple times for each shipment
 
-public class AStarSearch<E> 
+public class AStarSearch 
 {
-	public List<Node<E>> getPath(Node<E> source, Node<E> destination, int mapSize) {
-		PriorityQueue<Node<E>> toExplore = new PriorityQueue<Node<E>>(); 
-		HashSet<Node<E>> visited = new HashSet<Node<E>>();
-		Map<Node<E>, Node<E>> successors = new HashMap<Node<E>, Node<E>>();
+	public List<Node> getPath(Node source, Node destination, int mapSize) {
+		PriorityQueue<Node> toExplore = new PriorityQueue<Node>();  // need implement comparator -> in node(?) somwhere
+		HashSet<Node> visited = new HashSet<Node>();
+		Map<Node, Node> successors = new HashMap<Node, Node>();
 		
 		// can do for primitive types eg new Double/Integer/etc (0)
-		Map<Node<E>, Integer> gScore = new HashMap<Node<E>, Integer>();  // SELF NOTE: Double(primitive) parameter can be null, double can't (similar with int)
-		Map<Node<E>, Integer> fScore = new HashMap<Node<E>, Integer>();
-		Node<E> current = null;
+		Map<Node, Integer> gScore = new HashMap<Node, Integer>();  // SELF NOTE: Double(primitive) parameter can be null, double can't (similar with int)
+		Map<Node, Integer> fScore = new HashMap<Node, Integer>();
+		Node current = null;
 		toExplore.add(source);
 		gScore.put(source, 0);
 		fScore.put(source, 0/*replace by heurstic function*/);
@@ -33,27 +33,27 @@ public class AStarSearch<E>
 			toExplore.remove(current);  // redundant but keep so follow pseudo code -> remove once working at end
 			visited.add(current);
 			
-			for (Edge<E> neighbour : current.getEdges()) {
+			for (Edge neighbour : current.getEdges()) {
 				if (visited.contains(neighbour.getNodeTo())) continue; 
-				if (!toExplore.contains(neighbour.getNodeTo())) toExplore.add(neighbour.getNodeTo());
 				
 				// dont add refuel time when put gscore -> b/c extra if else here (ie if first loop -> dont add fuel)
-				int tentative_gScore = gScore.get(current) + current.getEdgeCost(destination) + current.getRefuelTime();
+				int tentative_gScore = gScore.get(current) + current.getEdgeCost(neighbour.getNodeTo()) + current.getRefuelTime();
 				if (tentative_gScore >= gScore.get(neighbour.getNodeTo())) continue; // bad path
 				
 				// good path
 				successors.put(neighbour.getNodeTo(), current);
 				gScore.put(neighbour.getNodeTo(), tentative_gScore);
 				fScore.put(neighbour.getNodeTo(), gScore.get(neighbour.getNodeTo()) + 0/*replace by heuristic function*/);
+				if (!toExplore.contains(neighbour.getNodeTo())) toExplore.add(neighbour.getNodeTo());
 			}
 		}
 		return null;
 	}
 	
-	public List<Node<E>> reconstructPath(Map<Node<E>, Node<E>> successors, Node<E> current) {
-		List<Node<E>> path = new LinkedList<Node<E>>();
+	public List<Node> reconstructPath(Map<Node, Node> successors, Node current) {
+		List<Node> path = new LinkedList<Node>();
 		path.add(current);
-		for (Map.Entry<Node<E>, Node<E>> parent : successors.entrySet()) {
+		for (Map.Entry<Node, Node> parent : successors.entrySet()) {
 			current = parent.getKey();
 			path.add(current); 	
 		}

@@ -1,23 +1,22 @@
 import java.util.LinkedList;
 
-public class Node<E> 
+public class Node 
 {
-	private int nodeId; // not needed?
-	private LinkedList<Edge<E>> edgesList;
-	private LinkedList<Node<E>> shipmentsList;
+	private LinkedList<Edge> edgesList;
+	private LinkedList<Node> shipmentsList;
 	private int refuelTime; 
 	private String name;
+	private int fScore;
+	private int gScore;
+	private int heuristic;
  	
-	public Node(int id, int refuelTime, String name) {
-		this.nodeId = id;
+	public Node(int id, int refuelTime, String name, int gScore, int fScore) {
 		this.refuelTime = refuelTime;
 		this.name = name;
-		this.edgesList = new LinkedList<Edge<E>>();
-		this.shipmentsList = new LinkedList<Node<E>>();
-	}
-	
-	public int getNodeId() {
-		return this.nodeId;
+		this.gScore = gScore;
+		this.fScore = fScore;
+		this.edgesList = new LinkedList<Edge>();
+		this.shipmentsList = new LinkedList<Node>();
 	}
 	
 	public int getRefuelTime() {
@@ -28,33 +27,53 @@ public class Node<E>
 		return this.name;
 	}
 	
-	public LinkedList<Edge<E>> getEdges() {
+	public int getFscore() {
+		return this.fScore;
+	}
+	
+	public int getGscore() {
+		return this.gScore;
+	}
+	
+	public void setFscore() {
+		this.fScore = this.gScore + this.heuristic;
+	}
+	
+	public void setGscore(int gscore) {
+		this.gScore = gscore;
+	}
+	
+	public void setHeuristic() {
+		this.heuristic = 0;
+	}
+	
+	public LinkedList<Edge> getEdges() {
 		return this.edgesList;
 	}
 	
-	public void addEdge(Node<E> destination, int cost) {
-		Edge<E> newEdge = new Edge<E>(destination, cost);
+	public void addEdge(Node destination, int cost) {
+		Edge newEdge = new Edge(destination, cost);
 		if (!edgesList.contains(newEdge)) {
 			edgesList.add(newEdge);
 		}
 	}
 	
-	public int getEdgeCost(Node<E> destination) {
-		for (Edge<E> neighbour : edgesList) {
+	public int getEdgeCost(Node destination) {
+		for (Edge neighbour : edgesList) {
 			if (destination.equals(neighbour.getNodeTo())) {
 				return neighbour.getCost();
 			}
 		}
-		return 0 /*infinity*/;
+		return Integer.MAX_VALUE /*infinity*/;
 	}
 	
-	public void addShipment(Node<E> destination) {
+	public void addShipment(Node destination) {
 		if (!shipmentsList.contains(destination)) {    // for all others like this (checking) -> remove -> check in main(?) -> precondition
 			shipmentsList.add(destination);
 		} 
 	}
 	
-	public boolean checkShipmentTo(Node<E> destination) {
+	public boolean checkShipmentTo(Node destination) {
 		return shipmentsList.contains(destination);
 	}
 	
@@ -76,7 +95,7 @@ public class Node<E>
 	// test
 	public void showEdge() {
 		System.out.print(this.name + " -> {");
-		for (Edge<E> edge : edgesList) {
+		for (Edge edge : edgesList) {
 			System.out.print(edge.getNodeTo().getName() + " ");
 		}
 		System.out.println("}");
@@ -84,7 +103,7 @@ public class Node<E>
 	
 	public void showNodeShipments() {
 		System.out.print(this.name + " -> {");
-		for (Node<E> node : shipmentsList) {
+		for (Node node : shipmentsList) {
 			System.out.print(node.getName() + " ");
 		}
 		System.out.println("}");
