@@ -1,4 +1,10 @@
 
+/**
+ * @author Jason Do
+ * COMP2511
+ * Assignment 2 Shipment Planner
+ */
+
 public class Edge
 {
 	private Node nodeTo;

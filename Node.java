@@ -1,5 +1,11 @@
 import java.util.LinkedList;
 
+/**
+ * @author Jason Do
+ * COMP2511
+ * Assignment 2 Shipment Planner
+ */
+
 public class Node 
 {
 	private LinkedList<Edge> edgesList;
@@ -35,6 +41,7 @@ public class Node
 		return this.gScore;
 	}
 	
+	// this is cost, only destination has this, start is always 0
 	public void setFscore() {
 		this.fScore = this.gScore + this.heuristic;
 	}

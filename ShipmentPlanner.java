@@ -39,10 +39,9 @@ public class ShipmentPlanner
             			break;
             	}
             }
-            // test
             map.showMap();
             map.showShipments();
-            map.aStarSearch(map.getNode("Sydney"), map.getNode("Manila"));
+            map.showPath(map.aStarSearch(map.getNode("Sydney"), map.getNode("Manila")));
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         } finally {

@@ -6,8 +6,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
+/**
+ * @author Jason Do
+ * COMP2511
+ * Assignment 2 Shipment Planner
+ */
+
 public class Search implements SearchAlgorithm 
 {
+	// instead of destination -> list of shipments -> when empty then reconstruct path
 	public List<Node> getPath(Node source, Node destination) {
 		PriorityQueue<Node> toExplore = new PriorityQueue<Node>(11, new Comparator<Node>() {
 			public int compare(Node i, Node j) {
@@ -27,10 +34,13 @@ public class Search implements SearchAlgorithm
 		source.setHeuristic();
 		source.setFscore();
 		
+		int nodesExpanded = 0;
+		
 		while (!toExplore.isEmpty()) {
 			current = toExplore.poll();
+			nodesExpanded++;
 			if (current.equals(destination)) {     // probably just do current.name/id  destination....   or do own equals method ...(best)
-				return reconstructPath(successors, destination);
+				return reconstructPath(successors, destination, nodesExpanded);
 			}
 			
 			toExplore.remove(current);  // redundant but keep so follow pseudo code -> remove once working at end
@@ -40,7 +50,7 @@ public class Search implements SearchAlgorithm
 				if (visited.contains(neighbour.getNodeTo())) continue; 
 				
 				// dont add refuel time when put gscore -> b/c extra if else here (ie if first loop -> dont add fuel)
-				int tentative_gScore = current.getGscore() + current.getEdgeCost(neighbour.getNodeTo()) /*+ current.getRefuelTime()*/;
+				int tentative_gScore = current.getGscore() + current.getEdgeCost(neighbour.getNodeTo()) + current.getRefuelTime();
 				if (tentative_gScore >= neighbour.getNodeTo().getGscore()) continue; // bad path
 				//System.out.println(current.getGscore() + " " + neighbour.getNodeTo().getGscore());
 				
@@ -57,18 +67,15 @@ public class Search implements SearchAlgorithm
 		return null;
 	}
 	
-	public List<Node> reconstructPath(Map<Node, Node> successors, Node current) {
+	public List<Node> reconstructPath(Map<Node, Node> successors, Node current, int nodesExpanded) {
 		List<Node> path = new LinkedList<Node>();
 		path.add(current);
 		for (Map.Entry<Node, Node> parent : successors.entrySet()) {
-			//System.out.println(current.getName());
-			//System.out.println(parent.getKey().getName() + " " + parent.getValue().getName());
 			current = parent.getValue();
-			if (!path.contains(current)) path.add(current); 	
-		}/*
-		for (Node node : path) {
-			System.out.println(node.getName());
-		}*/
+			if (current.equals(parent.getValue()) && path.size() > 1) continue;
+			path.add(current);
+		}
+		System.out.print(nodesExpanded + " nodes expanded");
 		return path;
 	}
 }
