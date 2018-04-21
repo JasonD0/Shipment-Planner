@@ -20,7 +20,7 @@ public class ShipmentPlanner
             	String[] line = sc.nextLine().split(" ");
             	switch (line[0]) {
             		case "Refuelling": 
-            			Node newNode = new Node(Integer.parseInt(line[1]), line[2], Integer.MAX_VALUE, Integer.MAX_VALUE);
+            			Node newNode = new Node(Integer.parseInt(line[1]), line[2]);
             			map.addNode(newNode);
             			break;
             		case "Time":

@@ -33,7 +33,7 @@ public class State implements Comparable<State>
 	 */
 	public void initShipmentsToDoList(Map<Node, List<Node>> shipments) {
 		this.shipmentsToDo = shipments;
-		/*for (Map.Entry<Node, List<Node>> idk : shipmentsList.entrySet()) {
+		/*for (Map.Entry<Node, List<Node>> idk : shipmentsToDo.entrySet()) {
 			for (Node node : idk.getValue()) {
 				System.out.println( idk.getKey().getName()+ " : " +node.getName());
 			}
@@ -78,7 +78,7 @@ public class State implements Comparable<State>
 
 	/**
 	 * Sets value of fScore
-	 * @param fScore	total length from the start node to last in path
+	 * @param fScore	total length from the start node to last node in path
 	 */
 	public void setFscore(int fScore) {
 		this.fScore = fScore;
@@ -92,22 +92,22 @@ public class State implements Comparable<State>
 		// if previous node(shipmentFrom) value contains node inserted(shipmentTo)   -> shipment done
 		if (!path.isEmpty()) {
 			Node shipmentFrom = this.path.get(path.size() - 1);
-			if (!shipmentsToDo.get(shipmentFrom).isEmpty() && shipmentsToDo.get(shipmentFrom).contains(node)) {
-				if (shipmentsToDo.get(shipmentFrom).size() == 1) shipmentsToDo.remove(shipmentFrom);
-				else shipmentsToDo.get(shipmentFrom).remove(node);
+			if (this.shipmentsToDo.get(shipmentFrom) != null && !this.shipmentsToDo.get(shipmentFrom).isEmpty()) {
+				if (this.shipmentsToDo.get(shipmentFrom).indexOf(node) != -1) {
+					if (this.shipmentsToDo.get(shipmentFrom).size() == 1) this.shipmentsToDo.remove(shipmentFrom);
+					else this.shipmentsToDo.get(shipmentFrom).remove(node);
+				}
 			}
 		}
 		this.path.add(node);
 	}
 
 	/**
-	 * Combines this state's path with another path
+	 * Sets path
 	 * @param path	path to be added to this state's path
 	 */
-	public void addPath(List<Node> path) {
-		for (Node node : path) {
-			this.path.add(node);
-		}
+	public void setPath(List<Node> path) {
+		this.path.addAll(path);
 	}
 
 	/**

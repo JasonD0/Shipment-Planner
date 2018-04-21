@@ -18,10 +18,8 @@ public class Node
 	 * Constructor for class Node
 	 * @param refuelTime	refuelling time at this node
 	 * @param name			name of this node
-	 * @param gScore		gScore of this node
-	 * @param fScore		fScore of this node
 	 */
-	public Node(int refuelTime, String name, int gScore, int fScore) {
+	public Node(int refuelTime, String name) {
 		this.refuelTime = refuelTime;
 		this.name = name;
 		this.edgesList = new LinkedList<Edge>();
