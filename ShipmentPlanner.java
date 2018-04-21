@@ -10,7 +10,6 @@ import java.util.Scanner;
 
 public class ShipmentPlanner 
 {
-	
     public static void main(String[] args) {
     	Graph map = new Graph();
     	File input = new File(args[0]);
@@ -48,5 +47,4 @@ public class ShipmentPlanner
             if (sc != null) sc.close();
         }
     }
-
 }

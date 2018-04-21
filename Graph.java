@@ -36,10 +36,6 @@ public class Graph
 		}
 	}
 	
-	public List<Node> getNodeList() {
-		return this.nodeList;
-	}
-	
 	/**
 	 * Returns Node with specified name
 	 * @param name	name of a node
@@ -53,7 +49,11 @@ public class Graph
 		}
 		return null;
 	}
-	
+
+	/**
+	 * Returns all nodes in the graph and the respective shipments
+	 * @return	map between each node and their list of shipments
+	 */
 	public Map<Node, List<Node>> getShipments() {
 		Map<Node, List<Node>> shipments = new HashMap<Node, List<Node>>();
 		for (Node shipmentFrom : nodeList) {

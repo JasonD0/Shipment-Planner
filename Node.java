@@ -88,21 +88,14 @@ public class Node
 			shipmentsList.add(destination);
 		} 
 	}
-	
+
+	/**
+	 * Returns list of shipments for this node
+	 * @return	shipmentsList
+	 */
 	public List<Node> getShipments() {
 		return this.shipmentsList;
 	}
-	
-	/**
-	 * Checks if destination is a node this node must go to
-	 * @param destination
-	 * @return	if this node's shipment list contains destination return true
-	 * 			else return false
-	 */
-	public boolean checkShipmentTo(Node destination) {
-		return shipmentsList.contains(destination);
-	}
-	
 	
 	/*
 	@Override
