@@ -1,6 +1,8 @@
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 // undirected map
 // shipment is directed
@@ -34,6 +36,10 @@ public class Graph
 		}
 	}
 	
+	public List<Node> getNodeList() {
+		return this.nodeList;
+	}
+	
 	/**
 	 * Returns Node with specified name
 	 * @param name	name of a node
@@ -48,6 +54,14 @@ public class Graph
 		return null;
 	}
 	
+	public Map<Node, List<Node>> getShipments() {
+		Map<Node, List<Node>> shipments = new HashMap<Node, List<Node>>();
+		for (Node shipmentFrom : nodeList) {
+			shipments.put(shipmentFrom, shipmentFrom.getShipments());
+		}
+		return shipments;
+	}
+	
 	/**
 	 * Returns path from source to destination using A* search algorithm
 	 * @param source		starting node of a path
@@ -56,7 +70,7 @@ public class Graph
 	 */
 	public List<Node> aStarSearch(Node source, Node destination) {
 		SearchAlgorithm searchAlg = new Search();
-		return searchAlg.getPath(source, destination);
+		return searchAlg.getPath(this, source, destination);
 	}
 	
 	/**
@@ -64,7 +78,10 @@ public class Graph
 	 * @param path	list of nodes that forms a path
 	 */
 	public void showPath(List<Node> path) {
-		System.out.print("\ncost = " + path.get(0).getFscore());
+		if (path == null) {
+			return;
+		}
+		//System.out.print("\ncost = " + path.get(0).getFscore());
 		Collections.reverse(path);
 		//test printing path correct
 		path.add(this.getNode("Shanghai"));

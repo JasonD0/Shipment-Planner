@@ -1,4 +1,5 @@
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Jason Do
@@ -12,9 +13,6 @@ public class Node
 	private LinkedList<Node> shipmentsList;
 	private int refuelTime; 
 	private String name;
-	private int gScore;			// distance from source node
-	private int heuristic;		// estimate to destination
-	private int fScore;			// distance from source node plus heuristic of destination 
  	
 	/**
 	 * Constructor for class Node
@@ -26,8 +24,6 @@ public class Node
 	public Node(int refuelTime, String name, int gScore, int fScore) {
 		this.refuelTime = refuelTime;
 		this.name = name;
-		this.gScore = gScore;
-		this.fScore = fScore;
 		this.edgesList = new LinkedList<Edge>();
 		this.shipmentsList = new LinkedList<Node>();
 	}
@@ -47,46 +43,7 @@ public class Node
 	public String getName() {
 		return this.name;
 	}
-	
-	/**
-	 * Returns fScore of this node
-	 * @return	fScore
-	 */
-	public int getFscore() {
-		return this.fScore;
-	}
-	
-	/**
-	 * Returns gScore of this node
-	 * @return	gScore
-	 */
-	public int getGscore() {
-		return this.gScore;
-	}
-	
-	// this is cost, only destination has this, start is always 0
-	/**
-	 * Sets value of thie node's fScore
-	 */
-	public void setFscore() {
-		this.fScore = this.gScore + this.heuristic;
-	}
-	
-	/**
-	 * Sets value of this node's gScore
-	 * @param gscore	distance from source node
-	 */
-	public void setGscore(int gscore) {
-		this.gScore = gscore;
-	}
-	
-	/**
-	 * Sets value of this node's heuristic
-	 */
-	public void setHeuristic() {
-		this.heuristic = 0;
-	}
-	
+
 	/**
 	 * Returns list of edges for this node
 	 * @return	list of edges
@@ -130,6 +87,10 @@ public class Node
 		if (!shipmentsList.contains(destination)) {    // for all others like this (checking) -> remove -> check in main(?) -> precondition
 			shipmentsList.add(destination);
 		} 
+	}
+	
+	public List<Node> getShipments() {
+		return this.shipmentsList;
 	}
 	
 	/**
