@@ -16,13 +16,12 @@ public class ShipmentPlanner
     	File input = new File(args[0]);
         Scanner sc = null;
         try {
-        	int nodeId = 0;
             sc = new Scanner(input);  
             while (sc.hasNext()) {
             	String[] line = sc.nextLine().split(" ");
             	switch (line[0]) {
             		case "Refuelling": 
-            			Node newNode = new Node(nodeId++, Integer.parseInt(line[1]), line[2], Integer.MAX_VALUE, Integer.MAX_VALUE);
+            			Node newNode = new Node(Integer.parseInt(line[1]), line[2], Integer.MAX_VALUE, Integer.MAX_VALUE);
             			map.addNode(newNode);
             			break;
             		case "Time":
@@ -39,8 +38,8 @@ public class ShipmentPlanner
             			break;
             	}
             }
-            map.showMap();
-            map.showShipments();
+            //map.showMap();
+            //map.showShipments();
             map.showPath(map.aStarSearch(map.getNode("Sydney"), map.getNode("Manila")));
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());

@@ -34,17 +34,17 @@ public class AStarSearch
 			visited.add(current);
 			
 			for (Edge neighbour : current.getEdges()) {
-				if (visited.contains(neighbour.getNodeTo())) continue; 
+				if (visited.contains(neighbour.getNode())) continue; 
 				
 				// dont add refuel time when put gscore -> b/c extra if else here (ie if first loop -> dont add fuel)
-				int tentative_gScore = gScore.get(current) + current.getEdgeCost(neighbour.getNodeTo()) + current.getRefuelTime();
-				if (tentative_gScore >= gScore.get(neighbour.getNodeTo())) continue; // bad path
+				int tentative_gScore = gScore.get(current) + current.getEdgeCost(neighbour.getNode()) + current.getRefuelTime();
+				if (tentative_gScore >= gScore.get(neighbour.getNode())) continue; // bad path
 				
 				// good path
-				successors.put(neighbour.getNodeTo(), current);
-				gScore.put(neighbour.getNodeTo(), tentative_gScore);
-				fScore.put(neighbour.getNodeTo(), gScore.get(neighbour.getNodeTo()) + 0/*replace by heuristic function*/);
-				if (!toExplore.contains(neighbour.getNodeTo())) toExplore.add(neighbour.getNodeTo());
+				successors.put(neighbour.getNode(), current);
+				gScore.put(neighbour.getNode(), tentative_gScore);
+				fScore.put(neighbour.getNode(), gScore.get(neighbour.getNode()) + 0/*replace by heuristic function*/);
+				if (!toExplore.contains(neighbour.getNode())) toExplore.add(neighbour.getNode());
 			}
 		}
 		return null;
