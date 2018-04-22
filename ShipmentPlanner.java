@@ -39,8 +39,7 @@ public class ShipmentPlanner
             }
             //map.showMap();
             //map.showShipments();
-            //map.showPath(map.aStarSearch(map.getNode("Sydney"), map.getNode("Manila")));
-            map.aStarSearch(map.getNode("Sydney"), map.getNode("Manila"));
+            map.showPath(map.aStarSearch(map.getNode("Sydney"), map.getNode("Manila")));
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         } finally {

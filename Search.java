@@ -40,10 +40,17 @@ public class Search implements SearchAlgorithm
 		else System.out.println("FAIL");
 		*/
 
+
+		// CURRENTLY ONLY USES GSCORE IE NO HEURISTICS HENCE NO FSCORE
+		// DONT KNOW IF PATH OPTIMAL NEED PRINT COST TO TEST AND SEE, NEED VARIABLES FOR N NODE EXPANDED
+
 		PriorityQueue<State> mapStates = new PriorityQueue<State>();			// Queue containing a path searched	
 		List<State> visited = new ArrayList<State>();							// List of paths visited
 		Map<Node, List<Node>> shipments = map.getShipments();
-		
+
+		// why does creating new Hashmap for shipments in each init -> still change all AND goes infinite
+
+		//List<Node> path = new LinkedList<Node>();
 		State initialState = new State(0);		// initially fScore is 0
 		initialState.addNode(source);					// add source to state path
 		initialState.initShipmentsToDoList(shipments);	// initialise shipment list for state
@@ -52,14 +59,23 @@ public class Search implements SearchAlgorithm
 		// get state where path lowest and contains shipment
 		while (!mapStates.isEmpty()) {																	// while OPEN is not empty
 			State currentState = mapStates.poll();														// remove <n, p> from head of queue (minimal f(n))
+			currentState.showPath();
 			visited.add(currentState);																	//  add <n, p> to CLOSED
-			if (currentState.checkGoalState()) return currentState.getPath();							// if n is a goal state return success path p
+			if (currentState.checkGoalState()) {
+				currentState.showPath();
+				return currentState.getPath();							// if n is a goal state return success path p
+			}
+			// problem : shipmentToDoList -> removes from all not each one
 			for (Edge e : currentState.getCurrentNode().getEdges()) {									// for each edge e from n to n� (with cost c, so g(n�) = g(n) + c)
-				State newState = new State(currentState.getFscore() + e.getCost());				// new state for each edge possibility
+				State newState = new State(currentState.getFscore() + e.getCost());
 				newState.initShipmentsToDoList(shipments);
-				newState.setPath(currentState.getPath());												// add current path and current edge to new state
+				newState.setPath(currentState.getPath());
 				newState.addNode(e.getNode());
-				mapStates.add(newState);
+				mapStates.add(newState);				// new state for each edge possibility
+				// change design so dont give state shipment
+				// check if shipment here
+				// instead of orig if else -> do if edge is shipmentTo -> go to lowest
+												// else prioritise lowest shipment from
 			}
 		}
 		// when testing, comment out below and see if get the optimal path then test with below to see if get less nodes expanded

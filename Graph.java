@@ -1,4 +1,3 @@
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -82,14 +81,6 @@ public class Graph
 			return;
 		}
 		//System.out.print("\ncost = " + path.get(0).getFscore());
-		Collections.reverse(path);
-		//test printing path correct
-		path.add(this.getNode("Shanghai"));
-		path.add(this.getNode("Singapore"));
-		path.add(this.getNode("Vancouver"));
-		path.add(this.getNode("Sydney"));
-		path.add(this.getNode("Vancouver"));
-		
 		for (int i = 1; i < path.size(); i++) {
 			System.out.print("\nShip " + path.get(i-1).getName() + " to " + path.get(i).getName());
 		}

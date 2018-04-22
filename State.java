@@ -23,8 +23,15 @@ public class State implements Comparable<State>
 	 * @param fScore	distance from start node to goal state
 	 */
 	public State(int fScore) {
-		this.path = new LinkedList<Node>();
+		this.path = new LinkedList<>();
 		this.fScore = fScore;
+	}
+
+	public void showPath() {
+		for (Node node : path) {
+			System.out.println(node.getName());
+		}
+		System.out.println();
 	}
 
 	/**
@@ -46,7 +53,7 @@ public class State implements Comparable<State>
 	 * 			else return false
 	 */
 	public boolean checkGoalState() {
-		for (Map.Entry<Node, List<Node>> idk : shipmentsToDo.entrySet()) {
+		for (Map.Entry<Node, List<Node>> idk : this.shipmentsToDo.entrySet()) {
 			if (!idk.getValue().isEmpty()) return false;
 		}
 		return true;
@@ -92,6 +99,7 @@ public class State implements Comparable<State>
 		// if previous node(shipmentFrom) value contains node inserted(shipmentTo)   -> shipment done
 		if (!path.isEmpty()) {
 			Node shipmentFrom = this.path.get(path.size() - 1);
+			// note size of shipmentoDo -> is num nodes(key)
 			if (this.shipmentsToDo.get(shipmentFrom) != null && !this.shipmentsToDo.get(shipmentFrom).isEmpty()) {
 				if (this.shipmentsToDo.get(shipmentFrom).indexOf(node) != -1) {
 					if (this.shipmentsToDo.get(shipmentFrom).size() == 1) this.shipmentsToDo.remove(shipmentFrom);
