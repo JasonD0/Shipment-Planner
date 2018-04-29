@@ -17,6 +17,7 @@ import java.util.Map.Entry;
 public class State implements Comparable<State>
 {
 	private List<Node> path;						// list of nodes forming the current path
+	private int gScore;								// cost of the current path
 	private int fScore;								// cost of the current path + estimated cost to the goal state
 	private Map<Node, List<Node>> shipmentsMade;	// map between shipments source and destination, representing shipments completed
 
@@ -24,8 +25,9 @@ public class State implements Comparable<State>
 	 * Constructor for State class
 	 * @param fScore    distance from start node to goal state
 	 */
-	public State(int fScore, List<Node> path, Map<Node, List<Node>> shipments) {
+	public State(int gScore, int fScore, List<Node> path, Map<Node, List<Node>> shipments) {
 		this.path = new LinkedList<>(path);
+		this.gScore = gScore;
 		this.fScore = fScore;
 		this.shipmentsMade = new HashMap<Node, List<Node>>(shipments);
 	}
@@ -104,6 +106,15 @@ public class State implements Comparable<State>
 	 */
 	public int getFscore() {
 		return this.fScore;
+	}
+
+	/**
+	 * Returns cost of the path
+	 * @return    		 gScore
+	 * @postcondition    returns the gScore
+	 */
+	public int getGscore() {
+		return this.gScore;
 	}
 
 	/**

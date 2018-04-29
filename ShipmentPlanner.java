@@ -23,6 +23,7 @@ public class ShipmentPlanner
     	File input = new File(args[0]);
         Scanner sc = null;
         try {
+        	// filter through input file and obtain graph details
             sc = new Scanner(input);  
             while (sc.hasNext()) {
             	String[] line = sc.nextLine().split(" ");

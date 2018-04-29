@@ -50,7 +50,7 @@ public class Search
 		int nodesExpanded = 0;    // number of states taken off the queue
 
 		// gets the initial state of the map
-		State initialState = new State(h.getHeuristic(shipmentsList), new ArrayList<Node>(), new HashMap<Node, List<Node>>());
+		State initialState = new State(0, h.getHeuristic(shipmentsList, new HashMap<Node, List<Node>>()), new ArrayList<Node>(), new HashMap<Node, List<Node>>());
 		initialState.addNode(source);
 		mapStates.add(initialState);
 
@@ -62,7 +62,7 @@ public class Search
 
 			if ( i == 10 ) {
 				System.out.println(nodesExpanded + " nodes expanded");
-				System.out.println("cost = " + currentState.getFscore());
+				System.out.println("cost = " + currentState.getGscore());
 				currentState.showPath();
 				return currentState.getPath();
 			} else {
@@ -78,12 +78,14 @@ public class Search
 			// gets the new state for each current node's edge and add it to the priority queue
 			for (Edge e : currentState.getCurrentNode().getEdges()) {
 				// heuristic -> makes less shipments made -> lower PQ -> ie less wasted time
-				State newState = new State(currentState.getFscore() + e.getCost() + h.getHeuristic(currentState.getShipmentsMade()), currentState.getPath(), currentState.getShipmentsMade());  // add value of herustic -> cost of all shipments left (change if time) -> so give state
+				// FSCORE IS WRONG -> GSCORE CORRECT -> IE HEURISTIC CALC WIERD
+				int gScore = currentState.getGscore() + e.getCost() + currentState.getCurrentNode().getRefuelTime();
+				State newState = new State(gScore,gScore + h.getHeuristic(shipmentsList, currentState.getShipmentsMade()), currentState.getPath(), currentState.getShipmentsMade());  // add value of herustic -> cost of all shipments left (change if time) -> so give state
 				newState.addNode(e.getNode());
 				// check if a shipment has been made
 				if (shipmentsList.get(currentState.getCurrentNode()).contains(e.getNode())) {
 					newState.addNewShipment(currentState.getCurrentNode(), e.getNode());
-					newState.setFscore(currentState.getFscore() + e.getCost());
+					newState.setFscore(gScore + h.getHeuristic(shipmentsList, currentState.getShipmentsMade())); // this part wrong -> wierd calc here  (b/c dont want currentState shipment made -> want newstate)
 				}
 				mapStates.add(newState);
 			}

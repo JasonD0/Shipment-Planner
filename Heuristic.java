@@ -18,15 +18,23 @@ public class Heuristic implements Strategy
      * @postcondition               returns the heuristic value for a given state
      */
     @Override
-    public int getHeuristic(Map<Node, List<Node>> goalStateProgress) {
-        int heuristic = 0;
-        // sums the total cost for shipments that are to be completed
-        for (Map.Entry<Node, List<Node>> shipments : goalStateProgress.entrySet()) {
-            heuristic += (shipments.getKey().getRefuelTime()) * shipments.getValue().size();        // eg sydney -> manila, vancouver    -> sydney manila    and sydney vancouver   -> sydney refuel twice ie size of shipmento
+    public int getHeuristic(Map<Node, List<Node>> goalState, Map<Node, List<Node>> goalStateProgress) {
+        int goalStateProgressCost = 0, goalStateCost = 0;
+        // gets the total cost for all shipments completed
+        for (Map.Entry<Node, List<Node>> shipments : goalState.entrySet()) {
+            goalStateCost += (shipments.getKey().getRefuelTime()) * shipments.getValue().size();        // eg sydney -> manila, vancouver    -> sydney manila    and sydney vancouver   -> sydney refuel twice ie size of shipmento
             for (Node shipmentsTo : shipments.getValue()) {
-                heuristic += shipments.getKey().getEdgeCost(shipmentsTo);
+                goalStateCost += shipments.getKey().getEdgeCost(shipmentsTo);
             }
         }
-        return heuristic;
+        // gets the total cost for completed shipments
+        for (Map.Entry<Node, List<Node>> shipments : goalStateProgress.entrySet()) {
+            goalStateProgressCost += (shipments.getKey().getRefuelTime()) * shipments.getValue().size();        // eg sydney -> manila, vancouver    -> sydney manila    and sydney vancouver   -> sydney refuel twice ie size of shipmento
+            for (Node shipmentsTo : shipments.getValue()) {
+                goalStateProgressCost += shipments.getKey().getEdgeCost(shipmentsTo);
+            }
+        }
+        System.out.println(goalStateCost - goalStateProgressCost);
+        return goalStateCost - goalStateProgressCost;
     }
 }
