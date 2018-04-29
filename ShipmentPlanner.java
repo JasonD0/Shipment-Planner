@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 /**
+ * The ShipmentPlanner class creates the graph
  * @author Jason Do
  * COMP2511
  * Assignment 2 Shipment Planner
@@ -10,6 +11,13 @@ import java.util.Scanner;
 
 public class ShipmentPlanner 
 {
+	/**
+	 * Creates a graph from the input text file
+	 * @precondition     shipments given are unique and not null, name of each port is one word,
+	 * 					 travel times follow the triangle inequality, travel time between two ports is the same in either direction
+	 * @param args       text file containing all relevant details to create the graph
+	 * @postcondition    create a graph representing the given information and prints the optimum path to complete all shipments
+	 */
     public static void main(String[] args) {
     	Graph map = new Graph();
     	File input = new File(args[0]);
@@ -39,7 +47,7 @@ public class ShipmentPlanner
             }
             //map.showMap();
             //map.showShipments();
-            map.showPath(map.aStarSearch(map.getNode("Sydney"), map.getNode("Manila")));
+            map.showPath(map.aStarSearch(map.getNode("Sydney")));
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         } finally {

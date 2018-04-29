@@ -9,6 +9,8 @@ import java.util.Map;
 // always refuel at every place 
 
 /**
+ * Representation of all links between all ports in a map
+ * @invariant follows the triangle inequality
  * @author Jason Do
  * COMP2511
  * Assignment 2 Shipment Planner
@@ -27,19 +29,20 @@ public class Graph
 	
 	/**
 	 * Adds node to graph
-	 * @param newNode	node to be added to graph
+	 * @precondition 	 node to be added is new to the graph
+	 * @param newNode    node to be added to graph
+	 * @postcondition 	 add node to the graph
 	 */
 	public void addNode(Node newNode) {
-		if (!nodeList.contains(newNode)) {
-			nodeList.add(newNode);
-		}
+		nodeList.add(newNode);
 	}
 	
 	/**
 	 * Returns Node with specified name
-	 * @param name	name of a node
-	 * @return		if node exists returns the node
-	 * 				else returns null
+	 * @param name    	 name of a node
+	 * @return		  	 if node exists returns the node
+	 * 				  	 else returns null
+	 * @postcondition    returns the node with the given name
 	 */
 	public Node getNode(String name) {
 		for (Node node : nodeList) {
@@ -51,10 +54,12 @@ public class Graph
 
 	/**
 	 * Returns all nodes in the graph and the respective shipments
-	 * @return	map between each node and their list of shipments
+	 * @return    		 map between each node and their list of shipments
+	 * @postcondition    returns a hashmap of shipments required
 	 */
 	public Map<Node, List<Node>> getShipments() {
 		Map<Node, List<Node>> shipments = new HashMap<Node, List<Node>>();
+		// maps shipment source node with shipment destination node
 		for (Node shipmentFrom : nodeList) {
 			shipments.put(shipmentFrom, shipmentFrom.getShipments());
 		}
@@ -63,23 +68,23 @@ public class Graph
 	
 	/**
 	 * Returns path from source to destination using A* search algorithm
-	 * @param source		starting node of a path
-	 * @param destination	ending node of a path
-	 * @return				path from source to destination
+	 * @param source     starting node of a path
+	 * @return			 path from source to destination
+	 * @postcondition    returns the optimum path from source node to the goal state
 	 */
-	public List<Node> aStarSearch(Node source, Node destination) {
-		SearchAlgorithm searchAlg = new Search();
-		return searchAlg.getPath(this, source, destination);
+	// remove destination
+	public List<Node> aStarSearch(Node source) {
+		Search searchAlg = new Search();
+		return searchAlg.getPath(this, source);
 	}
 	
 	/**
 	 * Prints the given path
-	 * @param path	list of nodes that forms a path
+	 * @precondition     path != null
+	 * @param path       list of nodes that forms a path
+	 * @postcondition    prints the path
 	 */
 	public void showPath(List<Node> path) {
-		if (path == null) {
-			return;
-		}
 		//System.out.print("\ncost = " + path.get(0).getFscore());
 		for (int i = 1; i < path.size(); i++) {
 			System.out.print("\nShip " + path.get(i-1).getName() + " to " + path.get(i).getName());

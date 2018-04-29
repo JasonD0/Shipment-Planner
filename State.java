@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
+ * Representation of a state of the graph produced from the A star search algorithm
+ * @invariant fScore >= 0, shipments are distinct and not null
  * @author Jason Do
  * COMP2511
  * Assignment 2 Shipment Planner
@@ -14,19 +16,21 @@ import java.util.Map.Entry;
 
 public class State implements Comparable<State>
 {
-	private List<Node> path;						// list of nodes forming the path
-	private Map<Node, List<Node>> shipmentsToDo;	// map between remaining shipments start node and list of it's shipments end node
-	private int fScore;
+	private List<Node> path;						// list of nodes forming the current path
+	private int fScore;								// cost of the current path + estimated cost to the goal state
+	private Map<Node, List<Node>> shipmentsMade;	// map between shipments source and destination, representing shipments completed
 
 	/**
 	 * Constructor for State class
-	 * @param fScore	distance from start node to goal state
+	 * @param fScore    distance from start node to goal state
 	 */
-	public State(int fScore) {
-		this.path = new LinkedList<>();
+	public State(int fScore, List<Node> path, Map<Node, List<Node>> shipments) {
+		this.path = new LinkedList<>(path);
 		this.fScore = fScore;
+		this.shipmentsMade = new HashMap<Node, List<Node>>(shipments);
 	}
 
+	// test
 	public void showPath() {
 		for (Node node : path) {
 			System.out.println(node.getName());
@@ -35,33 +39,50 @@ public class State implements Comparable<State>
 	}
 
 	/**
-	 * Initialise shipmentLists to all shipments required
-	 * @param shipments		map between all shipment start nodes and list of shipment end nodes
+	 * Adds the shipment completed to shipmentsMade
+	 * @param shipmentFrom    source node of the shipment
+	 * @param shipmentTo	  destination node of the shipment
+	 * @postcondition         adds the completed shipment to shipmentsMade hashmap
 	 */
-	public void initShipmentsToDoList(Map<Node, List<Node>> shipments) {
-		this.shipmentsToDo = shipments;
-		/*for (Map.Entry<Node, List<Node>> idk : shipmentsToDo.entrySet()) {
-			for (Node node : idk.getValue()) {
-				System.out.println( idk.getKey().getName()+ " : " +node.getName());
-			}
-		}*/
+	public void addNewShipment(Node shipmentFrom, Node shipmentTo) {
+		// add new shipment source
+		if (!shipmentsMade.containsKey(shipmentFrom)) {
+			List<Node> shipmentsTo = new ArrayList<Node>();
+			shipmentsTo.add(shipmentTo);
+			shipmentsMade.put(shipmentFrom, shipmentsTo);
+		// add shipment destination for existing shipment source
+		} else if (!shipmentsMade.get(shipmentFrom).contains(shipmentTo)) {
+			shipmentsMade.get(shipmentFrom).add(shipmentTo);
+		}
 	}
 
 	/**
-	 * Checks if all shipments completed
-	 * @return	if shipmentsToDo is empty return true
-	 * 			else return false
+	 * Returns list of shipments made
+	 * @return    		 shipments made
+	 * @postcondition    returns hashmap of shipments made
 	 */
-	public boolean checkGoalState() {
-		for (Map.Entry<Node, List<Node>> idk : this.shipmentsToDo.entrySet()) {
-			if (!idk.getValue().isEmpty()) return false;
-		}
+	public Map<Node, List<Node>> getShipmentsMade() {
+		return this.shipmentsMade;
+	}
+
+	/**
+	 * Checks if a particular shipment has been made
+	 * @param shipmentFrom    source node of the shipment
+	 * @param shipmentTo	  destination node of the shipment
+	 * @return				  true if shipment has been made
+	 * 						  false otherwise
+	 * @postcondition 		  checks whether a shipment has been made
+	 */
+	public boolean checkShipmentsMade(Node shipmentFrom, Node shipmentTo) {
+		if (!shipmentsMade.containsKey(shipmentFrom)) return false;
+		if (!shipmentsMade.get(shipmentFrom).contains(shipmentTo)) return false;
 		return true;
 	}
 
 	/**
 	 * Returns path of visited nodes
-	 * @return	path
+	 * @return    		 path
+	 * @postcondition    returns the path taken
 	 */
 	public List<Node> getPath() {
 		return this.path;
@@ -69,7 +90,8 @@ public class State implements Comparable<State>
 
 	/**
 	 * Returns last visited node
-	 * @return	last element of the path
+	 * @return    	 	 last element of the path
+	 * @postcondition    returns the last node visited
 	 */
 	public Node getCurrentNode() {
 		return this.path.get(path.size() - 1);
@@ -77,7 +99,8 @@ public class State implements Comparable<State>
 
 	/**
 	 * Returns total length from the start node to last node in path
-	 * @return	fScore
+	 * @return    		 fScore
+	 * @postcondition    returns the fScore
 	 */
 	public int getFscore() {
 		return this.fScore;
@@ -85,7 +108,8 @@ public class State implements Comparable<State>
 
 	/**
 	 * Sets value of fScore
-	 * @param fScore	total length from the start node to last node in path
+	 * @param fScore     total length from the start node to last node in path
+	 * @postcondition    sets the fscore to the given value
 	 */
 	public void setFscore(int fScore) {
 		this.fScore = fScore;
@@ -93,29 +117,11 @@ public class State implements Comparable<State>
 
 	/**
 	 * Adds node to path
-	 * @param node	node to be added to path
+	 * @param node       node to be added to path
+	 * @postcondition    adds the given node to the path
 	 */
 	public void addNode(Node node) {
-		// if previous node(shipmentFrom) value contains node inserted(shipmentTo)   -> shipment done
-		if (!path.isEmpty()) {
-			Node shipmentFrom = this.path.get(path.size() - 1);
-			// note size of shipmentoDo -> is num nodes(key)
-			if (this.shipmentsToDo.get(shipmentFrom) != null && !this.shipmentsToDo.get(shipmentFrom).isEmpty()) {
-				if (this.shipmentsToDo.get(shipmentFrom).indexOf(node) != -1) {
-					if (this.shipmentsToDo.get(shipmentFrom).size() == 1) this.shipmentsToDo.remove(shipmentFrom);
-					else this.shipmentsToDo.get(shipmentFrom).remove(node);
-				}
-			}
-		}
 		this.path.add(node);
-	}
-
-	/**
-	 * Sets path
-	 * @param path	path to be added to this state's path
-	 */
-	public void setPath(List<Node> path) {
-		this.path.addAll(path);
 	}
 
 	/**
