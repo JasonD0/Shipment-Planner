@@ -18,13 +18,14 @@ import java.util.Map;
 
 public class Graph 
 {
-	private LinkedList<Node> nodeList;	// list containing all nodes of this graph
-	
+	private List<Node> nodeList;	// list containing all nodes of this graph
+	private Search searchAlg;
 	/**
 	 * Constructor for class Graph
 	 */
 	public Graph () {
-		nodeList = new LinkedList<Node>();
+		this.nodeList = new LinkedList<Node>();
+		this.searchAlg = new Search();
 	}
 	
 	/**
@@ -74,8 +75,7 @@ public class Graph
 	 */
 	// remove destination
 	public List<Node> aStarSearch(Node source) {
-		Search searchAlg = new Search();
-		return searchAlg.getPath(this, source);
+		return this.searchAlg.getPath(this, source);
 	}
 	
 	/**

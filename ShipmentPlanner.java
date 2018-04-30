@@ -11,7 +11,6 @@ import java.util.Scanner;
 
 public class ShipmentPlanner 
 {
-	private static long startTime = System.currentTimeMillis();
 	/**
 	 * Creates a graph from the input text file
 	 * @precondition     shipments given are unique and not null, name of each port is one word,
@@ -55,8 +54,6 @@ public class ShipmentPlanner
         } finally {
             if (sc != null) sc.close();
         }
-        long endTime = System.currentTimeMillis();
-		System.out.println("It took " + (endTime - startTime) + " milliseconds");
 	}
 
 }

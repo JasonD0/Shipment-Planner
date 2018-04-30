@@ -16,6 +16,12 @@ import java.util.HashMap;
 
 public class Search
 {
+	private Strategy h;
+
+	public Search() {
+		this.h = new Heuristic();
+	}
+
 	/**
 	 * Checks if the state given satisfies the goal state of the algorithm
 	 * @param shipments       map representing the shipments completed
@@ -44,12 +50,10 @@ public class Search
 
 	public List<Node> getPath(Graph map, Node source) {
 
-			// INSTEAD OF MAP NODE LIST  -> MAP NODE MAP   -> MAP ->sihpmentTo int -> 1/0
 		// note to self : pq -> when poll -> gets lowest -> so when add order wont change
 		PriorityQueue<State> mapStates = new PriorityQueue<State>();	// Queue of all states searched ordered by each state's fScores
 		Map<Node, List<Node>> shipmentsList = new HashMap<Node, List<Node>>(map.getShipments());	// map between shipment source and destination
-		Heuristic h = new Heuristic();
-		h.heuristicSetup(shipmentsList);
+		((Heuristic)h).heuristicSetup(shipmentsList);
 		int nodesExpanded = 0;    // number of states taken off the queue
 
 		// gets the initial state of the map
@@ -74,15 +78,13 @@ public class Search
 			for (Edge e : currentState.getCurrentNode().getEdges()) {
 				// heuristic -> makes less shipments made -> lower PQ -> ie less wasted time
 				int gScore = currentState.getGscore() + e.getCost() + currentState.getCurrentNode().getRefuelTime();
-				State newState = new State(gScore,gScore + h.getHeuristic(currentState.getShipmentsMade()), currentState.getPath(), currentState.copyShipmentsMade());  // add value of herustic -> cost of all shipments left (change if time) -> so give state
+				State newState = new State(gScore,gScore + h.getHeuristic(currentState.getShipmentsMade()), currentState.getPath(), currentState.copyShipmentsMade());
 				// check if a shipment has been made
 				if (shipmentsList.get(newState.getCurrentNode()).contains(e.getNode())) {
 					newState.addNewShipment(newState.getCurrentNode(), e.getNode());
 					newState.setFscore(gScore + h.getHeuristic(newState.getShipmentsMade()));
 				}
 				newState.addNode(e.getNode());
-				// PROB IF SHIPMENTS -> ADD ONLY SHIPMENTS -> SO DONT ADD IF NO SHIPMENT -> DONT DO THIS IF SHIPMENT ALREADY MADE
-					// can do this B/C TRIANGLE INEQ
 				mapStates.add(newState);
 			}
 		}
@@ -90,3 +92,5 @@ public class Search
 		return null;
 	}
 }
+				// PROB IF SHIPMENTS -> ADD ONLY SHIPMENTS -> SO DONT ADD IF NO SHIPMENT -> DONT DO THIS IF SHIPMENT ALREADY MADE
+					// can do this B/C TRIANGLE INEQ
