@@ -68,6 +68,20 @@ public class State implements Comparable<State>
 	}
 
 	/**
+	 * Returns a copy of shipments made
+	 * @return           shipments made
+	 * @postcondition    return copy of the hashmap of shipments made
+	 */
+	public Map<Node, List<Node>> copyShipmentsMade() {
+		// only need return copy of the list -> only one changing -> not chanigng shipment from -> changing the new map
+		Map<Node, List<Node>> copy = new HashMap<Node, List<Node>>();
+		for (Map.Entry<Node, List<Node>> original : this.shipmentsMade.entrySet()) {
+			copy.put(original.getKey(), new LinkedList<Node>(original.getValue()));
+		}
+		return copy;
+	}
+
+	/**
 	 * Checks if a particular shipment has been made
 	 * @param shipmentFrom    source node of the shipment
 	 * @param shipmentTo	  destination node of the shipment
@@ -82,12 +96,16 @@ public class State implements Comparable<State>
 	}
 
 	/**
-	 * Returns path of visited nodes
+	 * Returns copy of the path of visited nodes
 	 * @return    		 path
-	 * @postcondition    returns the path taken
+	 * @postcondition    returns copy of path taken
 	 */
 	public List<Node> getPath() {
-		return this.path;
+		List<Node> copy = new LinkedList<Node>();
+		for (Node node : this.path) {
+			copy.add(node);
+		}
+		return copy;
 	}
 
 	/**
@@ -137,6 +155,7 @@ public class State implements Comparable<State>
 
 	/**
 	 * Comparator orders States by their fScores
+	 * lowest fScore has high priority
 	 * {@inheritDoc}
 	 */
 	@Override

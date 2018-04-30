@@ -11,6 +11,8 @@ import java.util.List;
 
 public class Heuristic implements Strategy
 {
+    private int initialHeuristic;
+
     /**
      * Returns the heuristic value for a particular state
      * @param goalStateProgress     map representing shipments that haven't been completed
@@ -18,23 +20,27 @@ public class Heuristic implements Strategy
      * @postcondition               returns the heuristic value for a given state
      */
     @Override
-    public int getHeuristic(Map<Node, List<Node>> goalState, Map<Node, List<Node>> goalStateProgress) {
-        int goalStateProgressCost = 0, goalStateCost = 0;
-        // gets the total cost for all shipments completed
-        for (Map.Entry<Node, List<Node>> shipments : goalState.entrySet()) {
-            goalStateCost += (shipments.getKey().getRefuelTime()) * shipments.getValue().size();        // eg sydney -> manila, vancouver    -> sydney manila    and sydney vancouver   -> sydney refuel twice ie size of shipmento
-            for (Node shipmentsTo : shipments.getValue()) {
-                goalStateCost += shipments.getKey().getEdgeCost(shipmentsTo);
-            }
-        }
-        // gets the total cost for completed shipments
+    public int getHeuristic(Map<Node, List<Node>> goalStateProgress) {
+        int goalStateProgressCost = 0;
+        // sums total cost of shipments made
         for (Map.Entry<Node, List<Node>> shipments : goalStateProgress.entrySet()) {
             goalStateProgressCost += (shipments.getKey().getRefuelTime()) * shipments.getValue().size();        // eg sydney -> manila, vancouver    -> sydney manila    and sydney vancouver   -> sydney refuel twice ie size of shipmento
             for (Node shipmentsTo : shipments.getValue()) {
                 goalStateProgressCost += shipments.getKey().getEdgeCost(shipmentsTo);
             }
         }
-        System.out.println(goalStateCost - goalStateProgressCost);
-        return goalStateCost - goalStateProgressCost;
+        return this.initialHeuristic - goalStateProgressCost;
+    }
+
+    public void heuristicSetup(Map<Node, List<Node>> goalState) {
+        int goalStateCost = 0;
+        // sums total cost of shipments required
+        for (Map.Entry<Node, List<Node>> shipments : goalState.entrySet()) {
+            goalStateCost += (shipments.getKey().getRefuelTime()) * shipments.getValue().size();        // eg sydney -> manila, vancouver    -> sydney manila    and sydney vancouver   -> sydney refuel twice ie size of shipmento
+            for (Node shipmentsTo : shipments.getValue()) {
+                goalStateCost += shipments.getKey().getEdgeCost(shipmentsTo);
+            }
+        }
+        this.initialHeuristic = goalStateCost;
     }
 }

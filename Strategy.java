@@ -10,5 +10,5 @@ import java.util.Map;
 
 public interface Strategy
 {
-    public int getHeuristic(Map<Node, List<Node>> goalState, Map<Node, List<Node>> goalStateProgress);
+    public int getHeuristic(Map<Node, List<Node>> goalStateProgress);
 }
