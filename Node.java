@@ -124,7 +124,7 @@ public class Node
 		}
 		System.out.println("}");
 	}
-	
+
 	public void showNodeShipments() {
 		System.out.print(this.name + " -> {");
 		for (Node node : shipmentsList) {

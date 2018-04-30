@@ -98,7 +98,7 @@ public class Graph
 			System.out.println(node.getName() + " " + node.getRefuelTime());
 		}
 	}
-	
+
 	public void showShipments() {
 		for (Node node : nodeList) {
 			node.showNodeShipments();

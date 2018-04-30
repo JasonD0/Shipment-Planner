@@ -63,21 +63,13 @@ public class Search
 			State currentState = mapStates.poll();
 			nodesExpanded++;
 
-			if ( i == 100 ) {
-				System.out.println(nodesExpanded + " nodes expanded");
-				System.out.println("cost = " + currentState.getGscore());
-				currentState.showPath();
+			// checks if current state satisfies the goal state
+			if (checkGoalState(shipmentsList, currentState)) {
+				System.out.print(nodesExpanded + " nodes expanded");
+				System.out.print("\ncost = " + currentState.getGscore());
 				return currentState.getPath();
-			} else {
-				i++;
 			}
-			/*
-				// checks if current state satisfies the goal state
-				if (checkGoalState(shipmentsList, currentState) {
-					currentState.showPath();
-					return currentState.getPath();
-				}
-			*/
+
 			// gets the new state for each current node's edge and add it to the priority queue
 			for (Edge e : currentState.getCurrentNode().getEdges()) {
 				// heuristic -> makes less shipments made -> lower PQ -> ie less wasted time
