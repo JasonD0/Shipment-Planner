@@ -24,7 +24,7 @@ public class Heuristic implements Strategy
         int goalStateProgressCost = 0;
         // sums total cost of shipments made
         for (Map.Entry<Node, List<Node>> shipments : goalStateProgress.entrySet()) {
-            goalStateProgressCost += (shipments.getKey().getRefuelTime()) * shipments.getValue().size();        // eg sydney -> manila, vancouver    -> sydney manila    and sydney vancouver   -> sydney refuel twice ie size of shipmento
+            goalStateProgressCost += (shipments.getKey().getRefuelTime()) * shipments.getValue().size();
             for (Node shipmentsTo : shipments.getValue()) {
                 goalStateProgressCost += shipments.getKey().getEdgeCost(shipmentsTo);
             }
@@ -36,7 +36,7 @@ public class Heuristic implements Strategy
         int goalStateCost = 0;
         // sums total cost of shipments required
         for (Map.Entry<Node, List<Node>> shipments : goalState.entrySet()) {
-            goalStateCost += (shipments.getKey().getRefuelTime()) * shipments.getValue().size();        // eg sydney -> manila, vancouver    -> sydney manila    and sydney vancouver   -> sydney refuel twice ie size of shipmento
+            goalStateCost += (shipments.getKey().getRefuelTime()) * shipments.getValue().size();
             for (Node shipmentsTo : shipments.getValue()) {
                 goalStateCost += shipments.getKey().getEdgeCost(shipmentsTo);
             }

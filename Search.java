@@ -50,7 +50,6 @@ public class Search
 
 	public List<Node> getPath(Graph map, Node source) {
 
-		// note to self : pq -> when poll -> gets lowest -> so when add order wont change
 		PriorityQueue<State> mapStates = new PriorityQueue<State>();	// Queue of all states searched ordered by each state's fScores
 		Map<Node, List<Node>> shipmentsList = new HashMap<Node, List<Node>>(map.getShipments());	// map between shipment source and destination
 		((Heuristic)h).heuristicSetup(shipmentsList);
@@ -61,7 +60,6 @@ public class Search
 		initialState.addNode(source);
 		mapStates.add(initialState);
 
-		int i = 0;
 		// finds the state satisfying the goal state
 		while (!mapStates.isEmpty()) {
 			State currentState = mapStates.poll();
@@ -76,7 +74,6 @@ public class Search
 
 			// gets the new state for each current node's edge and add it to the priority queue
 			for (Edge e : currentState.getCurrentNode().getEdges()) {
-				// heuristic -> makes less shipments made -> lower PQ -> ie less wasted time
 				int gScore = currentState.getGscore() + e.getCost() + currentState.getCurrentNode().getRefuelTime();
 				State newState = new State(gScore,gScore + h.getHeuristic(currentState.getShipmentsMade()), currentState.getPath(), currentState.copyShipmentsMade());
 				// check if a shipment has been made

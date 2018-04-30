@@ -7,6 +7,13 @@ import java.util.Scanner;
  * @author Jason Do
  * COMP2511
  * Assignment 2 Shipment Planner
+ *
+ *
+ * Heuristic runtime complexity analaysis
+ *     big O notation : O(NM)
+ *     - worst case of iterating over hashmap and getting keys (ie shipment source) is 1*number of shipments (N)
+ *     - worst case of iterating over key values (ie the list of shipment destinations) is number of shipment destinations (M)
+ *     - hence O(N*M)
  */
 
 public class ShipmentPlanner 
