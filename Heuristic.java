@@ -2,7 +2,7 @@ import java.util.Map;
 import java.util.List;
 
 /**
- * Implementation of the strategy that supplies context with the heuristic cost
+ * Calculates the estimate cost of the cheapest path from current state to goal state
  * @invariant shipments are distinct and not null
  * @author Jason Do
  * COMP2511
@@ -15,15 +15,18 @@ public class Heuristic implements Strategy
 
     /**
      * Returns the heuristic value for a particular state
-     * @param goalStateProgress     map representing shipments that haven't been completed
-     * @return                      estimate to reaching the goal state from the current state
-     * @postcondition               returns the heuristic value for a given state
+     * @precondition       goalState != null
+     * @param currState    map representing shipments that haven't been completed
+     * @return             estimate to reaching the goal state from the current state
+     * @postcondition      returns the heuristic value for a given state
      */
     @Override
-    public int getHeuristic(Map<Node, List<Node>> goalStateProgress) {
+    public int getHeuristic(State currState, State goalState) {
+        if (currState == null) return this.initialHeuristic;
         int goalStateProgressCost = 0;
+
         // sums total cost of shipments made
-        for (Map.Entry<Node, List<Node>> shipments : goalStateProgress.entrySet()) {
+        for (Map.Entry<Node, List<Node>> shipments : currState.getShipmentsMade().entrySet()) {
             goalStateProgressCost += (shipments.getKey().getRefuelTime()) * shipments.getValue().size();
             for (Node shipmentsTo : shipments.getValue()) {
                 goalStateProgressCost += shipments.getKey().getEdgeCost(shipmentsTo);
@@ -32,6 +35,12 @@ public class Heuristic implements Strategy
         return this.initialHeuristic - goalStateProgressCost;
     }
 
+    /**
+     * Sets initial heuristic value
+     * @precondition       goalState != null
+     * @param goalState    goal state of the search algorithm
+     * @postcondition      sets initial heuristic value
+     */
     public void heuristicSetup(Map<Node, List<Node>> goalState) {
         int goalStateCost = 0;
         // sums total cost of shipments required

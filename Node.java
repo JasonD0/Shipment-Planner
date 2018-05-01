@@ -102,34 +102,4 @@ public class Node
 		return this.shipmentsList;
 	}
 	
-	/*
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null) return false;
-		if (this.getClass() != o.getClass()) return false;
-		
-		Node<?> node = (Node<?>) o;
-		return (this.nodeId == node.nodeId && 
-				this.refuelTime == node.refuelTime && 
-				this.name.equals(node.name)); 
-	}*/
-	
-	
-	// test
-	public void showEdge() {
-		System.out.print(this.name + " -> {");
-		for (Edge edge : edgesList) {
-			System.out.print(edge.getNode().getName() + " ");
-		}
-		System.out.println("}");
-	}
-
-	public void showNodeShipments() {
-		System.out.print(this.name + " -> {");
-		for (Node node : shipmentsList) {
-			System.out.print(node.getName() + " ");
-		}
-		System.out.println("}");
-	}
 }

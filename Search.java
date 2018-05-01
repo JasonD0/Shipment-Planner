@@ -18,6 +18,9 @@ public class Search
 {
 	private Strategy h;
 
+	/**
+	 * Constructor for Search class
+	 */
 	public Search() {
 		this.h = new Heuristic();
 	}
@@ -42,23 +45,31 @@ public class Search
 
 	/**
 	 * Implements the A star algorithm and returns the path from source to the goal state
-	 * @param map			graph containing all nodes
-	 * @param source		starting node
-	 * @return				list of nodes forming a path from source to the goal state
-	 * @postcondition       returns the optimum path from the source to the goal state
+	 * @precondition	 source is Sydney
+	 * @param map		 graph containing all nodes
+	 * @param source	 starting node
+	 * @return		     list of nodes forming a path from source to the goal state
+	 * @postcondition    returns the optimum path from the source to the goal state
 	 */
 
 	public List<Node> getPath(Graph map, Node source) {
 
-		PriorityQueue<State> mapStates = new PriorityQueue<State>();	// Queue of all states searched ordered by each state's fScores
+		PriorityQueue<State> mapStates = new PriorityQueue<State>();								// Queue of all states searched ordered by each state's fScores
 		Map<Node, List<Node>> shipmentsList = new HashMap<Node, List<Node>>(map.getShipments());	// map between shipment source and destination
+
+		// gets the goal state of the map
 		((Heuristic)h).heuristicSetup(shipmentsList);
-		int nodesExpanded = 0;    // number of states taken off the queue
+		State goalState = new State(0, 0, new ArrayList<Node>(), shipmentsList);
 
 		// gets the initial state of the map
-		State initialState = new State(0, h.getHeuristic(new HashMap<Node, List<Node>>()), new ArrayList<Node>(), new HashMap<Node, List<Node>>());
+		int gScore = 0;												 // cost of path of the current state
+		int heuristic = h.getHeuristic(null, goalState);    // estimated cost from current state to goal state
+		int fScore = gScore + heuristic;
+		State initialState = new State(gScore, fScore, new ArrayList<Node>(), new HashMap<Node, List<Node>>());
 		initialState.addNode(source);
 		mapStates.add(initialState);
+
+		int nodesExpanded = 0;    // number of states taken off the queue
 
 		// finds the state satisfying the goal state
 		while (!mapStates.isEmpty()) {
@@ -66,21 +77,34 @@ public class Search
 			nodesExpanded++;
 
 			// checks if current state satisfies the goal state
-			if (checkGoalState(shipmentsList, currentState)) {
+			if (checkGoalState(goalState.getShipmentsMade(), currentState)) {
 				System.out.print(nodesExpanded + " nodes expanded");
 				System.out.print("\ncost = " + currentState.getGscore());
 				return currentState.getPath();
 			}
 
 			// gets the new state for each current node's edge and add it to the priority queue
-			for (Edge e : currentState.getCurrentNode().getEdges()) {
-				int gScore = currentState.getGscore() + e.getCost() + currentState.getCurrentNode().getRefuelTime();
-				State newState = new State(gScore,gScore + h.getHeuristic(currentState.getShipmentsMade()), currentState.getPath(), currentState.copyShipmentsMade());
-				// check if a shipment has been made
-				if (shipmentsList.get(newState.getCurrentNode()).contains(e.getNode())) {
-					newState.addNewShipment(newState.getCurrentNode(), e.getNode());
-					newState.setFscore(gScore + h.getHeuristic(newState.getShipmentsMade()));
+			for (Edge e : currentState.currentNode().getEdges()) {
+				Node curr = currentState.currentNode();
+				gScore = currentState.getGscore() + e.getCost() + curr.getRefuelTime();
+				State newState = new State(gScore, fScore, currentState.getPath(), currentState.copyShipmentsMade());
+
+				if (!newState.isShipmentSource(curr)) {
+					if (goalState.isShipmentSource(curr) && !goalState.checkShipmentsMade(curr, e.getNode())) continue;
+				} else {
+					if (goalState.getShipmentsTo(curr).size() > newState.getShipmentsTo(curr).size()) {
+						if (!goalState.checkShipmentsMade(curr, e.getNode()) || newState.checkShipmentsMade(curr, e.getNode())) continue;
+					}
 				}
+
+				// check if a shipment
+				if (goalState.checkShipmentsMade(curr, e.getNode())) newState.addNewShipment(curr, e.getNode());
+
+				// calculate fScore
+				heuristic = h.getHeuristic(newState, goalState);
+				fScore = gScore + heuristic;
+				newState.setFscore(fScore);
+
 				newState.addNode(e.getNode());
 				mapStates.add(newState);
 			}
@@ -89,5 +113,3 @@ public class Search
 		return null;
 	}
 }
-				// PROB IF SHIPMENTS -> ADD ONLY SHIPMENTS -> SO DONT ADD IF NO SHIPMENT -> DONT DO THIS IF SHIPMENT ALREADY MADE
-					// can do this B/C TRIANGLE INEQ

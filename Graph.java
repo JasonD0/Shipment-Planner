@@ -85,23 +85,8 @@ public class Graph
 	 * @postcondition    prints the path
 	 */
 	public void showPath(List<Node> path) {
-		//System.out.print("\ncost = " + path.get(0).getFscore());
 		for (int i = 1; i < path.size(); i++) {
 			System.out.print("\nShip " + path.get(i-1).getName() + " to " + path.get(i).getName());
-		}
-	}
-	
-	// test
-	public void showMap() {
-		for (Node node : nodeList) {
-			node.showEdge();
-			System.out.println(node.getName() + " " + node.getRefuelTime());
-		}
-	}
-
-	public void showShipments() {
-		for (Node node : nodeList) {
-			node.showNodeShipments();
 		}
 	}
 }

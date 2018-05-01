@@ -12,7 +12,7 @@ import java.util.Scanner;
  * Heuristic runtime complexity analaysis
  *     big O notation : O(NM)
  *     - worst case of iterating over hashmap and getting keys (ie shipment source) is 1*number of shipments (N)
- *     - worst case of iterating over key values (ie the list of shipment destinations) is number of shipment destinations (M)
+ *     - worst case of iterating over key values (ie list of shipment destinations) is number of shipment destinations (M)
  *     - hence O(N*M)
  */
 
@@ -53,8 +53,6 @@ public class ShipmentPlanner
             			break;
             	}
             }
-            //map.showMap();
-            //map.showShipments();
             map.showPath(map.aStarSearch(map.getNode("Sydney")));
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());

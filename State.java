@@ -32,14 +32,6 @@ public class State implements Comparable<State>
 		this.shipmentsMade = new HashMap<Node, List<Node>>(shipments);
 	}
 
-	// test
-	public void showPath() {
-		for (Node node : path) {
-			System.out.println(node.getName());
-		}
-		System.out.println();
-	}
-
 	/**
 	 * Adds the shipment completed to shipmentsMade
 	 * @param shipmentFrom    source node of the shipment
@@ -82,17 +74,37 @@ public class State implements Comparable<State>
 	}
 
 	/**
-	 * Checks if a particular shipment has been made
-	 * @param shipmentFrom    source node of the shipment
-	 * @param shipmentTo	  destination node of the shipment
+	 * Checks if shipment has been made
+	 * @param shipmentFrom    node to check shipment source
+	 * @param shipmentTo	  node to check shipment destination
 	 * @return				  true if shipment has been made
 	 * 						  false otherwise
 	 * @postcondition 		  checks whether a shipment has been made
 	 */
 	public boolean checkShipmentsMade(Node shipmentFrom, Node shipmentTo) {
-		if (!shipmentsMade.containsKey(shipmentFrom)) return false;
-		if (!shipmentsMade.get(shipmentFrom).contains(shipmentTo)) return false;
+		if (!this.shipmentsMade.containsKey(shipmentFrom)) return false;
+		if (!this.shipmentsMade.get(shipmentFrom).contains(shipmentTo)) return false;
 		return true;
+	}
+
+	/**
+	 * Checks if node is a shipment source
+	 * @param shipmentFrom    node to check shipment source
+	 * @return				  true if node is shipment source
+	 * 						  false otherwise
+	 */
+	public boolean isShipmentSource(Node shipmentFrom) {
+		if (this.shipmentsMade.get(shipmentFrom) == null || this.shipmentsMade.get(shipmentFrom).size() == 0) return false;
+		return true;
+	}
+
+	/**
+	 * Returns shipment destination for a shipment source
+	 * @param shipmentFrom    source node of shipment
+	 * @return				  list of shipment destinations
+	 */
+	public List<Node> getShipmentsTo(Node shipmentFrom) {
+		return this.shipmentsMade.get(shipmentFrom);
 	}
 
 	/**
@@ -113,17 +125,8 @@ public class State implements Comparable<State>
 	 * @return    	 	 last element of the path
 	 * @postcondition    returns the last node visited
 	 */
-	public Node getCurrentNode() {
+	public Node currentNode() {
 		return this.path.get(path.size() - 1);
-	}
-
-	/**
-	 * Returns total length from the start node to last node in path
-	 * @return    		 fScore
-	 * @postcondition    returns the fScore
-	 */
-	public int getFscore() {
-		return this.fScore;
 	}
 
 	/**
@@ -137,7 +140,7 @@ public class State implements Comparable<State>
 
 	/**
 	 * Sets value of fScore
-	 * @param fScore     total length from the start node to last node in path
+	 * @param fScore     cost of the path + heuristic
 	 * @postcondition    sets the fscore to the given value
 	 */
 	public void setFscore(int fScore) {
