@@ -58,8 +58,8 @@ public class Search
 		Map<Node, List<Node>> shipmentsList = new HashMap<Node, List<Node>>(map.getShipments());	// map between shipment source and destination
 
 		// gets the goal state of the map
-		((Heuristic)h).heuristicSetup(shipmentsList);
 		State goalState = new State(0, 0, new ArrayList<Node>(), shipmentsList);
+		((Heuristic)h).heuristicSetup(goalState);
 
 		// gets the initial state of the map
 		int gScore = 0;												 // cost of path of the current state
@@ -89,11 +89,16 @@ public class Search
 				gScore = currentState.getGscore() + e.getCost() + curr.getRefuelTime();
 				State newState = new State(gScore, fScore, currentState.getPath(), currentState.copyShipmentsMade());
 
+				// curr is currently not a shipment source for a shipment made
 				if (!newState.isShipmentSource(curr)) {
+					// if curr is a shipment source for a shipment required but edge isnt a shipment then continue
 					if (goalState.isShipmentSource(curr) && !goalState.checkShipmentsMade(curr, e.getNode())) continue;
 				} else {
+					// if there are more shipment destinations for curr but shipment already made for edge or the edge isnt a shipment then continue
 					if (goalState.getShipmentsTo(curr).size() > newState.getShipmentsTo(curr).size()) {
 						if (!goalState.checkShipmentsMade(curr, e.getNode()) || newState.checkShipmentsMade(curr, e.getNode())) continue;
+						// if edge destination not smallest shipment destination continue
+						if (e.getNode() != getSmallestShipmentTo(shipmentsList, curr, newState)) continue;
 					}
 				}
 
@@ -111,5 +116,31 @@ public class Search
 		}
 
 		return null;
+	}
+
+	// get smallest shipment destination not already made
+
+	/**
+	 * Returns smallest shipment destination for the shipment source that havent formed the shipment
+	 * @precondition          shipmentFrom is a shipment source
+	 * @param shipmentList    list of shipments required
+	 * @param shipmentFrom	  source node of a shipment
+	 * @param current		  current state of the map
+	 * @return				  node
+	 * @postcondition         returns smallest shipment destination for given shipment source
+	 */
+	public Node getSmallestShipmentTo(Map<Node, List<Node>> shipmentList, Node shipmentFrom, State current) {
+		Node smallest = null;
+		int smallestCost = Integer.MAX_VALUE;
+		for (Node shipmentTo : shipmentList.get(shipmentFrom)) {
+			// if the current shipmentTo is shipment destination continue
+			if (current.checkShipmentsMade(shipmentFrom, shipmentTo)) continue;
+			int currentCost = shipmentTo.getEdgeCost(shipmentFrom) + shipmentTo.getRefuelTime();
+			if (smallestCost > currentCost) {
+				smallestCost = currentCost;
+				smallest = shipmentTo;
+			}
+		}
+		return smallest;
 	}
 }

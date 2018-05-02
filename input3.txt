@@ -1,0 +1,35 @@
+Refuelling 6 A
+Refuelling 4 B
+Refuelling 4 Sydney
+Refuelling 6 D
+Refuelling 8 E
+Refuelling 8 F
+Refuelling 8 G
+Time 18 A B
+Time 24 A Sydney
+Time 18 A D
+Time 10 A E
+Time 10 A F
+Time 10 A G
+Time 10 B Sydney
+Time 24 B D
+Time 12 B E
+Time 10 B F
+Time 10 B G
+Time 24 Sydney D
+Time 22 Sydney E
+Time 24 Sydney F
+Time 24 Sydney G
+Time 20 D E
+Time 20 D F
+Time 20 D G
+Time 20 E F
+Time 20 E G
+Time 20 F G
+// test same destination
+Shipment A Sydney
+Shipment B Sydney
+Shipment D Sydney
+Shipment E Sydney
+Shipment F Sydney
+Shipment G Sydney

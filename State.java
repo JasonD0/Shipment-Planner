@@ -92,6 +92,7 @@ public class State implements Comparable<State>
 	 * @param shipmentFrom    node to check shipment source
 	 * @return				  true if node is shipment source
 	 * 						  false otherwise
+	 * @postcondition         checks whether shipmentFrom is a shipment source
 	 */
 	public boolean isShipmentSource(Node shipmentFrom) {
 		if (this.shipmentsMade.get(shipmentFrom) == null || this.shipmentsMade.get(shipmentFrom).size() == 0) return false;
@@ -100,8 +101,10 @@ public class State implements Comparable<State>
 
 	/**
 	 * Returns shipment destination for a shipment source
+	 * @precondition          shipmentFrom is a shipment source
 	 * @param shipmentFrom    source node of shipment
 	 * @return				  list of shipment destinations
+	 * @postcondition         returns list of shipment destinations for shipment source
 	 */
 	public List<Node> getShipmentsTo(Node shipmentFrom) {
 		return this.shipmentsMade.get(shipmentFrom);

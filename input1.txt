@@ -1,0 +1,51 @@
+// test medium map
+Refuelling 6 Sydney
+Refuelling 4 Shanghai
+Refuelling 4 Singapore
+Refuelling 6 Vancouver
+Refuelling 8 Manila
+Refuelling 10 A
+Refuelling 4 B
+Refuelling 6 C
+Time 13 Sydney Shanghai
+Time 15 Sydney Singapore
+Time 12 Sydney Vancouver
+Time 15 Sydney Manila
+Time 23 Sydney A
+Time 19 Sydney B
+Time 14 Sydney C
+Time 22 Shanghai Singapore
+Time 14 Shanghai Vancouver
+Time 11 Shanghai Manila
+Time 16 Shanghai A
+Time 13 Shanghai B
+Time 12 Shanghai C
+Time 15 Singapore Vancouver
+Time 19 Singapore Manila
+Time 21 Singapore A
+Time 15 Singapore B
+Time 15 Singapore C
+Time 16 Vancouver Manila
+Time 25 Vancouver A
+Time 11 Vancouver B
+Time 24 Vancouver C
+Time 14 A B
+Time 20 A C
+Time 17 B C
+// test lots of shipments
+Shipment C Singapore
+Shipment Vancouver Singapore
+Shipment Shanghai A
+Shipment B Vancouver
+Shipment Sydney Shanghai
+Shipment B C
+Shipment Shanghai C
+Shipment Manila Singapore
+Shipment Singapore A
+Shipment A C
+Shipment Sydney Manila
+Shipment C A
+Shipment Vancouver Shanghai
+Shipment B A
+Shipment Singapore Manila
+Shipment Vancouver B
