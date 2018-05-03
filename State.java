@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 
 /**
  * Representation of a state of the graph produced from the A star search algorithm
- * @invariant fScore >= 0, shipments are distinct and not null
+ * @invariant shipments are distinct and not null
  * @author Jason Do
  * COMP2511
  * Assignment 2 Shipment Planner
@@ -30,6 +30,63 @@ public class State implements Comparable<State>
 		this.gScore = gScore;
 		this.fScore = fScore;
 		this.shipmentsMade = new HashMap<Node, List<Node>>(shipments);
+	}
+
+	/**
+	 * Checks if the state given satisfies the goal state of the algorithm
+	 * @param shipments       map representing the shipments completed
+	 * @return				  true if goal state satisfied
+	 * 						  false otherwise
+	 * @postcondition 		  checks if the goal state has been satisfied
+	 */
+	public boolean checkGoalState(Map<Node, List<Node>> shipments) {
+		for (Map.Entry<Node, List<Node>> shipmentsRequired : shipments.entrySet()) {
+			Node shipmentFrom = shipmentsRequired.getKey();
+			for (Node shipmentTo : shipmentsRequired.getValue()) {
+				if (!checkShipmentsMade(shipmentFrom, shipmentTo)) return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Returns smallest shipment destination for the shipment source that havent formed the shipment
+	 * @precondition          shipmentFrom is a shipment source
+	 * @param shipmentList    list of shipments required
+	 * @param shipmentFrom	  source node of a shipment
+	 * @return				  node
+	 * @postcondition         returns smallest shipment destination for given shipment source
+	 */
+	public Node getSmallestShipmentTo(Map<Node, List<Node>> shipmentList, Node shipmentFrom) {
+		Node smallest = null;
+		int smallestCost = Integer.MAX_VALUE;
+		for (Node shipmentTo : shipmentList.get(shipmentFrom)) {
+			// if the current shipmentTo is shipment destination continue
+			if (checkShipmentsMade(shipmentFrom, shipmentTo)) continue;
+			int currentCost = shipmentTo.getEdgeCost(shipmentFrom) + shipmentTo.getRefuelTime();
+			if (smallestCost > currentCost) {
+				smallestCost = currentCost;
+				smallest = shipmentTo;
+			}
+		}
+		return smallest;
+	}
+
+	/**
+	 * Return lowest edge cost for given node
+	 * @param source     source node of an edge
+	 * @return			 edge cost
+	 * @postcondition    returns lowest edge cost for source
+	 */
+	public int getLowestEdgeCost(Node source) {
+		int smallestCost = Integer.MAX_VALUE;
+		for (Edge destination : source.getEdges()) {
+			int currentCost = destination.getCost() + destination.getNode().getRefuelTime();
+			if (smallestCost > currentCost) {
+				smallestCost = currentCost;
+			}
+		}
+		return smallestCost;
 	}
 
 	/**

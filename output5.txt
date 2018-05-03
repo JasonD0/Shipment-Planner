@@ -1,0 +1,13 @@
+n nodes expanded
+cost = 270
+Ship Sydney to A
+Ship A to Vancouver
+Ship Vancouver to Manila
+Ship Manila to Shanghai
+Ship Shanghai to Sydney
+Ship Sydney to Manila
+Ship Manila to A
+Ship A to Singapore
+Ship Singapore to Shanghai
+Ship Shanghai to Vancouver
+Ship Vancouver to Shanghai

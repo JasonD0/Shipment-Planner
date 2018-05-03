@@ -2,15 +2,14 @@ n nodes expanded
 cost = 320
 Ship Sydney to B
 Ship B to Sydney
-Ship Sydney to B
-Ship B to G
+Ship Sydney to D
+Ship D to Sydney
+Ship Sydney to G
 Ship G to Sydney
-Ship Sydney to A
-Ship A to Sydney
-Ship Sydney to E
-Ship E to Sydney
 Ship Sydney to B
 Ship B to F
 Ship F to Sydney
-Ship Sydney to D
-Ship D to Sydney
+Ship Sydney to E
+Ship E to Sydney
+Ship Sydney to A
+Ship A to Sydney

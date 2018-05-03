@@ -1,16 +1,16 @@
 n nodes expanded
-cost = 315
+cost = 327
 Ship Sydney to C
 Ship C to Shanghai
 Ship Shanghai to C
 Ship C to A
 Ship A to Singapore
 Ship Singapore to B
-Ship B to Vancouver
-Ship Vancouver to Singapore
-Ship Singapore to B
 Ship B to Sydney
 Ship Sydney to Manila
 Ship Manila to Singapore
+Ship Singapore to B
+Ship B to Vancouver
+Ship Vancouver to Singapore
 Ship Singapore to Shanghai
 Ship Shanghai to Singapore
